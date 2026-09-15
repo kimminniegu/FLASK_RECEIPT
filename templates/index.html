@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPACT RECORD — Daily Log</title>
+    
+    <!-- 폰트 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/joungkyun/font-d2coding/d2coding.css">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <div class="brand">IMPACT.</div>
+            <p class="subtitle">Record your trivial moments into meaningful artifacts.</p>
+        </header>
+
+        <!-- 탭 네비게이션 -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="receipt-tab">01. DAILY RECEIPT</button>
+            <button class="tab-btn" data-tab="ticket-tab">02. THOUGHT TICKET</button>
+        </nav>
+
+        <!-- 탭 1: 영수증 생성기 -->
+        <main class="content-section active" id="receipt-tab">
+            <div class="grid-container">
+                <!-- 입력 패널 -->
+                <div class="card form-panel">
+                    <h2 class="section-title">Today's Routine</h2>
+                    <p class="desc">Enter your tasks or ask AI to parse your journal.</p>
+
+                    <!-- AI 파서 박스 -->
+                    <div class="ai-box">
+                        <div class="ai-box-header">
+                            <span class="ai-tag">✨ AI RECEIPT PARSER</span>
+                            <div class="lang-switch">
+                                <label><input type="radio" name="targetLang" value="EN" checked> 영문 번역</label>
+                                <label><input type="radio" name="targetLang" value="KO"> 한국어 유지</label>
+                            </div>
+                        </div>
+                        <textarea id="ai-chat-input" rows="2" placeholder="오늘 하루를 편하게 서술해주세요. (예: 9시에 일어나서 운동하고 카페에서 4시간 코딩함)"></textarea>
+                        <button class="btn ai-btn" id="btn-ai-parse">AI로 요약 및 채우기</button>
+                    </div>
+
+                    <div class="divider-line"></div>
+                    
+                    <div class="input-group">
+                        <label>Vibe / Mood</label>
+                        <input type="text" id="receipt-mood" placeholder="e.g. Slightly Tired" value="PRODUCTIVE CHAOS">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Task Items (Enter separated)</label>
+                        <textarea id="receipt-tasks" rows="4" placeholder="Deep work 3h&#10;Drank coffee">Deep work 4h
+Drank 3 cups of coffee
+Spaced out 30m
+Watched cat videos 45m</textarea>
+                    </div>
+
+                    <button class="btn primary-btn" id="btn-render-receipt">Print Receipt</button>
+                </div>
+
+                <!-- 영수증 프리뷰 -->
+                <div class="card preview-panel">
+                    <div class="receipt-container" id="receipt-target">
+                        <div class="receipt-header">
+                            <div class="receipt-logo">*** DAILY RECEIPT ***</div>
+                            <p class="meta-line">STORE: MY LIFE CO.</p>
+                            <p class="meta-line" id="rcpt-order-id">ORD: IMP-09151430</p>
+                            <p class="meta-line" id="rcpt-date">DATE: 2026.09.15 14:30:00</p>
+                        </div>
+                        <div class="divider-dashed"></div>
+                        <div class="receipt-body" id="rcpt-item-list"></div>
+                        <div class="divider-dashed"></div>
+                        <div class="receipt-summary">
+                            <div class="row"><span>TOTAL ITEMS:</span><span id="rcpt-count">4</span></div>
+                            <div class="row"><span>ENERGY USED:</span><span id="rcpt-energy">74.0 kcal</span></div>
+                            <div class="row font-bold"><span>MOOD:</span><span id="rcpt-mood-text">PRODUCTIVE CHAOS</span></div>
+                        </div>
+                        <div class="divider-dashed"></div>
+                        <div class="receipt-footer">
+                            <p>THANK YOU FOR SURVIVING TODAY.</p>
+                            <div class="barcode">||||| | |||| ||| || |||||| | |||</div>
+                        </div>
+                    </div>
+                    <button class="btn secondary-btn" id="btn-download-receipt">Download as PNG</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 탭 2: 티켓 발권기 -->
+        <main class="content-section" id="ticket-tab">
+            <div class="grid-container">
+                <div class="card form-panel">
+                    <h2 class="section-title">Mind Ticket</h2>
+                    <p class="desc">Define a focus thought or release a baggage to carry lightly.</p>
+                    
+                    <div class="input-group">
+                        <label>Passenger (Your Name)</label>
+                        <input type="text" id="ticket-name" value="MIN">
+                    </div>
+                    <div class="input-group">
+                        <label>Core Affirmation or Baggage to Dump</label>
+                        <textarea id="ticket-thought" rows="3">BYE WORLD!</textarea>
+                    </div>
+                    <button class="btn primary-btn" id="btn-render-ticket">Issue Ticket</button>
+                </div>
+
+                <div class="card preview-panel">
+                    <div class="ticket-wrapper" id="ticket-target">
+                        <div class="ticket-main">
+                            <div class="ticket-header-bar">
+                                <span class="tkt-icon">🧠</span>
+                                <span class="tkt-head-title">BOARDING PASS</span>
+                            </div>
+                            <div class="ticket-content">
+                                <div class="bg-watermark">🧠</div>
+                                <h3 class="ticket-msg" id="tkt-msg">"BYE WORLD!"</h3>
+                                
+                                <div class="ticket-info-group">
+                                    <div class="info-row">
+                                        <span class="icon">👤</span>
+                                        <div>
+                                            <div class="label">PASSENGER</div>
+                                            <div class="val" id="tkt-name">MIN</div>
+                                        </div>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="icon">✈️</span>
+                                        <div>
+                                            <div class="label">DESTINATION</div>
+                                            <div class="val">PEACE OF MIND</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="brand-watermark-text">MIND TRAVEL</div>
+                            </div>
+                        </div>
+
+                        <div class="ticket-stub">
+                            <div class="stub-header-bar">
+                                <span>MIND TRAVEL</span>
+                            </div>
+                            <div class="stub-content">
+                                <div class="stub-top-row">
+                                    <span class="stub-flight-no">NO. 2026-X</span>
+                                    <span class="check-badge">✓</span>
+                                </div>
+                                
+                                <div class="stub-field">
+                                    <div class="label">PASSENGER</div>
+                                    <div class="val" id="tkt-stub-name">MIN</div>
+                                </div>
+
+                                <div class="valid-stamp">VALID</div>
+
+                                <div class="stub-barcode-wrap">
+                                    <div class="barcode-label">VALIDATION STAMP</div>
+                                    <div class="real-barcode">||| | |||| | ||| |||| | || |||</div>
+                                    <div class="barcode-numbers">9090 20306 20036 1025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <button class="btn secondary-btn" id="btn-download-ticket">Download Ticket</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
