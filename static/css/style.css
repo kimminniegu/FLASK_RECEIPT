@@ -276,6 +276,7 @@ input[type="text"]:focus, textarea:focus {
 /* 보딩패스 티켓 스타일 */
 .ticket-wrapper {
     width: 440px;
+    max-width: 440px;
     min-height: 220px;
     height: auto;
     background: #ffffff;
