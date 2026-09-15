@@ -93,11 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 4. 생각 티켓 렌더링
+// 4. 생각 티켓 렌더링
     const btnRenderTicket = document.getElementById('btn-render-ticket');
     btnRenderTicket.addEventListener('click', () => {
-        const name = document.getElementById('ticket-name').value || 'TRAVELER';
-        const thought = document.getElementById('ticket-thought').value || 'EMPTY THOUGHT';
+        const name = document.getElementById('ticket-name').value.trim() || 'YOUR_NAME';
+        const thought = document.getElementById('ticket-thought').value.trim() || 'HELLO, WORLD!';
 
         document.getElementById('tkt-name').innerText = name;
         document.getElementById('tkt-stub-name').innerText = name;
