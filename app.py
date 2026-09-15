@@ -74,18 +74,32 @@ def ai_summarize():
     )
 
     prompt = f"""
-You are an intelligent daily-log assistant for a stylish receipt generator.
+You are an intelligent daily-log assistant for a minimalist thermal receipt generator.
 User's story about today:
 "{user_input}"
 
+CRITICAL RULES FOR MOOD & EMOTICON:
+1. Do NOT use any unicode/colored emojis (NO ☕, ⚡, 😴, 🔥, etc.).
+2. You MUST use ONLY pure ASCII text-based facial expressions inside parentheses, such as:
+   - Happy/Energetic: '( ^_^)b', '(^o^)/', '( *^▽^*)'
+   - Hardworking/Focus: '( •̀_•́)', '(ง •̀_•́)ง'
+   - Tired/Exhausted: '( -_・)', '(x_x)', '(-.-)Zzz'
+   - Peaceful/Chill: '( ´ ▽ ` )', '( ˙-˙ )'
+   - Overwhelmed: '(◎_◎;)'
+
 Instructions:
-1. Extract 3 to 6 key specific action items / events from the story.
-2. For each task, estimate a realistic energy/calorie expenditure (integer only, e.g., intensive studying/work: 250~450, exercise: 300~600, coffee/eating: 20~50, chilling/scrolling: 30~80).
-3. Formulate a short, punchy 1-3 word mood summary WITH A MATCHING FACIAL EXPRESSION / EMOJI at the beginning (e.g., '⚡ PRODUCTIVE CHAOS', '😴 SLEEPY SURVIVOR', '🫠 BURNT OUT', '☕ CAFFEINE POWER', '🧘 CALM & MINDFUL', '🔥 ON FIRE').
+1. Extract 3 to 6 specific action items / events.
+2. For each task, estimate a realistic energy/calorie expenditure (integer only).
+3. Formulate a mood string combining the text emoticon and a 1-3 word capitalized English/Korean summary.
+   Examples of 'mood':
+   - "( ^_^)b CAFFEINE POWER"
+   - "( •̀_•́) PRODUCTIVE DAY"
+   - "(x_x) FULLY BURNT OUT"
+   - "( ´ ▽ ` ) PEACEFUL AFTERNOON"
 4. {lang_instruction}
-5. Respond ONLY with valid JSON matching this exact structure:
+5. Respond ONLY with valid JSON matching:
 {{
-    "mood": "EMOJI + EXTRACTED_MOOD",
+    "mood": "(TEXT_FACE) MOOD_TEXT",
     "items": [
         {{"task": "Task description", "energy": 320}},
         {{"task": "Task description", "energy": 45}}
