@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 탭 전환
+    // 1. 탭 전환 (영수증 <-> 생각 티켓)
     const tabBtns = document.querySelectorAll('.tab-btn');
     const sections = document.querySelectorAll('.content-section');
 
@@ -14,33 +14,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. 영수증 렌더링
+    // 2. 영수증 렌더링 (칼로리 및 텍스트콘 Mood 반영)
     const btnRenderReceipt = document.getElementById('btn-render-receipt');
     btnRenderReceipt.addEventListener('click', async () => {
-        const mood = document.getElementById('receipt-mood').value;
+        const mood = document.getElementById('receipt-mood').value || '( •̀_•́) PRODUCTIVE';
         const taskText = document.getElementById('receipt-tasks').value;
-        const tasks = taskText.split('\n').map(t => t.trim()).filter(t => t.length > 0);
+        const rawLines = taskText.split('\n').map(t => t.trim()).filter(t => t.length > 0);
 
         try {
             const res = await fetch('/api/generate-receipt', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mood, tasks })
+                body: JSON.stringify({ mood, items: rawLines })
             });
             const data = await res.json();
 
             document.getElementById('rcpt-order-id').innerText = `ORD: ${data.order_id}`;
             document.getElementById('rcpt-date').innerText = `DATE: ${data.timestamp}`;
             document.getElementById('rcpt-count').innerText = data.total_items;
-            document.getElementById('rcpt-energy').innerText = data.energy_used;
-            document.getElementById('rcpt-mood-text').innerText = data.mood.toUpperCase();
+            document.getElementById('rcpt-energy').innerText = data.total_energy;
+            document.getElementById('rcpt-mood-text').innerText = data.mood;
 
             const itemList = document.getElementById('rcpt-item-list');
             itemList.innerHTML = '';
-            data.tasks.forEach((item, idx) => {
+            data.items.forEach((item, idx) => {
                 const row = document.createElement('div');
                 row.className = 'row';
-                row.innerHTML = `<span>${idx + 1}. ${item}</span><span>1.0</span>`;
+                row.innerHTML = `
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;">
+                        ${idx + 1}. ${item.task}
+                    </span>
+                    <span>${item.energy}</span>
+                `;
                 itemList.appendChild(row);
             });
         } catch (err) {
@@ -48,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 초기 영수증 1회 렌더링
+    // 화면 시작 시 초기 영수증 1회 자동 렌더링
     btnRenderReceipt.click();
 
-    // 3. AI 파서 연동
+    // 3. AI 파서 연동 (AI 요약 + 칼로리 추정 + 아스키 표정 생성)
     const btnAiParse = document.getElementById('btn-ai-parse');
     btnAiParse.addEventListener('click', async () => {
         const chatInput = document.getElementById('ai-chat-input').value.trim();
@@ -79,10 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // 인풋 박스에 선 표정 포함 Mood 및 "항목 (칼로리)" 형식으로 자동 채우기
             document.getElementById('receipt-mood').value = data.mood;
-            document.getElementById('receipt-tasks').value = data.tasks.join('\n');
+            document.getElementById('receipt-tasks').value = data.items
+                .map(item => `${item.task} (${item.energy})`)
+                .join('\n');
 
-            // 영수증 자동 업데이트
+            // 영수증 자동 업데이트 실행
             btnRenderReceipt.click();
 
         } catch (err) {
@@ -93,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-// 4. 생각 티켓 렌더링
+    // 4. 생각 티켓 렌더링 (기본값: YOUR_NAME / HELLO, WORLD!)
     const btnRenderTicket = document.getElementById('btn-render-ticket');
     btnRenderTicket.addEventListener('click', () => {
         const name = document.getElementById('ticket-name').value.trim() || 'YOUR_NAME';
@@ -104,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('tkt-msg').innerText = `"${thought}"`;
     });
 
-    // 5. 이미지 다운로드 함수 (투명도 지원)
+    // 5. 고화질 이미지 다운로드 함수 (html2canvas)
     function setupDownload(btnId, targetId, fileName) {
         document.getElementById(btnId).addEventListener('click', () => {
             const target = document.getElementById(targetId);

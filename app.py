@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 from dotenv import load_dotenv
@@ -14,28 +15,49 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def index():
     return render_template('index.html')
 
-# 영수증 수치 연산 엔드포인트
+# 1. 영수증 렌더링 API (수동 입력 및 계산 지원)
 @app.route('/api/generate-receipt', methods=['POST'])
 def generate_receipt():
     data = request.json or {}
-    tasks = data.get('tasks', [])
-    mood = data.get('mood', 'NEUTRAL')
-    
-    total_items = len(tasks)
+    raw_items = data.get('items', [])
+    mood = data.get('mood', '😐 NEUTRAL')
+
+    processed_items = []
+    total_energy = 0
+
+    # 항목별 텍스트와 칼로리 처리 (예: "Deep work 4h (320)" 또는 단순 "Deep work 4h")
+    for item in raw_items:
+        if isinstance(item, dict):
+            task = item.get('task', '')
+            energy = int(item.get('energy', 50))
+        else:
+            task_str = str(item).strip()
+            # 괄호 안의 숫자(kcal) 파싱 시도
+            match = re.search(r'\((\d+)\s*(kcal)?\)', task_str, re.IGNORECASE)
+            if match:
+                energy = int(match.group(1))
+                task = re.sub(r'\(.*?\)', '', task_str).strip()
+            else:
+                task = task_str
+                energy = 80 # 기본값
+        
+        processed_items.append({'task': task, 'energy': energy})
+        total_energy += energy
+
+    total_items = len(processed_items)
     formatted_time = datetime.now().strftime("%Y.%m.%d %H:%M:%S")
-    energy_used = total_items * 18.5
-    
+
     return jsonify({
         'status': 'success',
         'timestamp': formatted_time,
-        'tasks': tasks,
+        'items': processed_items,
         'mood': mood,
         'total_items': total_items,
-        'energy_used': f"{energy_used:.1f} kcal",
+        'total_energy': f"{total_energy} kcal",
         'order_id': f"IMP-{datetime.now().strftime('%m%d%H%M')}"
     })
 
-# OpenAI 일과 요약 및 번역 엔드포인트
+# 2. OpenAI 기반 일과 요약, 칼로리 추정 및 표정 Mood 추출
 @app.route('/api/ai-summarize', methods=['POST'])
 def ai_summarize():
     data = request.json or {}
@@ -58,12 +80,16 @@ User's story about today:
 
 Instructions:
 1. Extract 3 to 6 key specific action items / events from the story.
-2. Formulate a short, punchy 1-3 word mood summary (e.g., 'COFFEE OVERLOAD', 'PEACEFUL CALM', 'CHAOTIC PRODUCTIVE').
-3. {lang_instruction}
-4. Respond ONLY with valid JSON matching this exact structure:
+2. For each task, estimate a realistic energy/calorie expenditure (integer only, e.g., intensive studying/work: 250~450, exercise: 300~600, coffee/eating: 20~50, chilling/scrolling: 30~80).
+3. Formulate a short, punchy 1-3 word mood summary WITH A MATCHING FACIAL EXPRESSION / EMOJI at the beginning (e.g., '⚡ PRODUCTIVE CHAOS', '😴 SLEEPY SURVIVOR', '🫠 BURNT OUT', '☕ CAFFEINE POWER', '🧘 CALM & MINDFUL', '🔥 ON FIRE').
+4. {lang_instruction}
+5. Respond ONLY with valid JSON matching this exact structure:
 {{
-    "mood": "EXTRACTED_MOOD",
-    "tasks": ["Task 1", "Task 2", "Task 3"]
+    "mood": "EMOJI + EXTRACTED_MOOD",
+    "items": [
+        {{"task": "Task description", "energy": 320}},
+        {{"task": "Task description", "energy": 45}}
+    ]
 }}
 """
 
