@@ -9,7 +9,7 @@ body {
     color: #191f28;
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
-    padding: 40px 20px;
+    padding: 40px 16px;
 }
 
 .wrapper {
@@ -19,11 +19,11 @@ body {
 
 .header {
     text-align: left;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .brand {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 800;
     letter-spacing: -0.5px;
     color: #000;
@@ -31,22 +31,22 @@ body {
 
 .subtitle {
     color: #8b95a1;
-    font-size: 15px;
-    margin-top: 6px;
+    font-size: 14px;
+    margin-top: 4px;
 }
 
 /* 탭 버튼 */
 .nav-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .tab-btn {
     border: none;
     background: #e5e8eb;
     color: #4e5968;
-    padding: 10px 18px;
+    padding: 9px 16px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
@@ -82,30 +82,30 @@ body {
 .card {
     background: #ffffff;
     border-radius: 20px;
-    padding: 28px;
+    padding: 24px;
     border: 1px solid #e5e8eb;
     display: flex;
     flex-direction: column;
 }
 
 .section-title {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
     margin-bottom: 4px;
 }
 
 .desc {
-    font-size: 14px;
+    font-size: 13px;
     color: #8b95a1;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
-/* AI Assistant 박스 */
+/* [문제 2 해결] AI Assistant Block 및 라벨 줄바꿈 방지 */
 .ai-box {
     background: #f2f4f6;
     border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 18px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
     border: 1px solid #e5e8eb;
 }
 
@@ -113,7 +113,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    gap: 8px;
+    flex-wrap: wrap; /* 폭이 좁을 때 줄 단위로 깔끔하게 정렬 */
 }
 
 .ai-tag {
@@ -121,17 +123,23 @@ body {
     font-weight: 800;
     color: #3182f6;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .lang-switch {
-    font-size: 11px;
+    font-size: 11.5px;
     color: #4e5968;
     display: flex;
     gap: 10px;
+    white-space: nowrap; /* 글자 아래로 꺾임 방지 */
 }
 
 .lang-switch label {
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
 }
 
 .ai-btn {
@@ -151,16 +159,16 @@ body {
 
 .divider-line {
     border-top: 1px solid #f2f4f6;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .input-group {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .input-group label {
     display: block;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #6b7684;
     margin-bottom: 6px;
@@ -187,7 +195,7 @@ input[type="text"]:focus, textarea:focus {
 .btn {
     border: none;
     border-radius: 12px;
-    padding: 14px 20px;
+    padding: 13px 20px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -210,86 +218,21 @@ input[type="text"]:focus, textarea:focus {
     opacity: 0.85;
 }
 
-/* 영수증 스타일 */
-.preview-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.receipt-container {
-    width: 290px;
-    background: #ffffff;
-    padding: 24px 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #ececec;
-    font-family: 'D2Coding', 'Space Mono', monospace;
-    font-size: 12px;
-    color: #111;
-    line-height: 1.5;
-}
-
-.receipt-header {
-    text-align: center;
-    margin-bottom: 12px;
-}
-
-.receipt-logo {
-    font-weight: 700;
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.meta-line {
-    font-size: 10px;
-    color: #555;
-}
-
-.divider-dashed {
-    border-top: 1px dashed #222;
-    margin: 12px 0;
-}
-
-.receipt-body .row, .receipt-summary .row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-}
-
-.font-bold {
-    font-weight: 700;
-}
-
-.receipt-footer {
-    text-align: center;
-    font-size: 10px;
-    margin-top: 8px;
-}
-
-.barcode {
-    font-size: 16px;
-    letter-spacing: 2px;
-    margin-top: 6px;
-}
-
-/* ===================================================
-   공통 프리뷰 패널 (모바일에서 아래로 깔끔하게 배치)
-   =================================================== */
+/* 프리뷰 패널 공통 */
 .preview-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    overflow: hidden;
 }
 
 /* ===================================================
-   영수증 스타일 (원래대로 유지)
+   영수증 스타일 (D2Coding 고정)
    =================================================== */
 .receipt-container {
-    width: 290px;
+    width: 280px;
+    max-width: 100%;
     background: #ffffff;
     padding: 24px 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -344,16 +287,17 @@ input[type="text"]:focus, textarea:focus {
 }
 
 /* ===================================================
-   보딩패스 티켓 스타일 (가로형 유지 + 모바일 자동 핏)
+   [문제 1 & 3 해결] 보딩패스 티켓 스타일 (가로형 유지 + 높이 일치)
    =================================================== */
 .ticket-wrapper {
-    width: 440px;
+    width: 100%;
+    max-width: 440px;
     min-height: 220px;
     height: auto;
     background: #ffffff;
     border-radius: 16px;
     display: flex;
-    flex-direction: row; /* 원래 가로 디자인 유지 */
+    flex-direction: row !important; /* 모바일에서도 무조건 원본 가로형 유지 */
     position: relative;
     border: 1px solid #d1d6db;
     overflow: hidden;
@@ -361,6 +305,7 @@ input[type="text"]:focus, textarea:focus {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
 }
 
+/* 좌측 본권 */
 .ticket-main {
     flex: 2.8;
     display: flex;
@@ -370,20 +315,23 @@ input[type="text"]:focus, textarea:focus {
     background: #ffffff;
 }
 
+/* [문제 3 해결] 좌우 헤더 바 높이 및 색상 100% 통일 */
 .ticket-header-bar {
+    height: 38px;
     background: #191f28;
     color: #ffffff;
-    padding: 10px 18px;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
+    box-sizing: border-box;
 }
 
 .ticket-content {
-    padding: 16px 18px 12px 18px;
+    padding: 16px 16px 14px 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -397,14 +345,14 @@ input[type="text"]:focus, textarea:focus {
     position: absolute;
     right: 5px;
     bottom: -15px;
-    font-size: 96px;
+    font-size: 88px;
     opacity: 0.05;
     pointer-events: none;
     user-select: none;
 }
 
 .ticket-msg {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 800;
     color: #191f28;
     line-height: 1.35;
@@ -414,7 +362,7 @@ input[type="text"]:focus, textarea:focus {
 
 .ticket-info-group {
     display: flex;
-    gap: 24px;
+    gap: 16px;
     margin-top: 10px;
     z-index: 2;
 }
@@ -422,57 +370,63 @@ input[type="text"]:focus, textarea:focus {
 .info-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .info-row .icon {
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .info-row .label, .stub-field .label {
-    font-size: 8px;
+    font-size: 7.5px;
     font-weight: 700;
     color: #8b95a1;
     letter-spacing: 0.5px;
 }
 
 .info-row .val, .stub-field .val {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 800;
     color: #191f28;
     white-space: nowrap;
 }
 
 .brand-watermark-text {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     color: #e5e8eb;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     text-align: right;
 }
 
+/* 우측 스텁 */
 .ticket-stub {
-    flex: 1.4;
-    min-width: 130px;
+    flex: 1.3;
+    min-width: 115px;
     display: flex;
     flex-direction: column;
     background: #fafbfc;
     position: relative;
 }
 
+/* [문제 3 해결] 우측 헤더 바도 좌측과 정확히 동일한 높이(38px)와 배경색 */
 .stub-header-bar {
-    background: #252b36;
+    height: 38px;
+    background: #191f28;
     color: #8b95a1;
-    padding: 10px 8px;
+    padding: 0 10px;
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.8px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     white-space: nowrap;
+    box-sizing: border-box;
 }
 
 .stub-content {
-    padding: 12px 14px;
+    padding: 12px 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -488,19 +442,19 @@ input[type="text"]:focus, textarea:focus {
 
 .stub-flight-no {
     font-family: 'Space Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     color: #191f28;
     white-space: nowrap;
 }
 
 .check-badge {
-    font-size: 10px;
+    font-size: 9px;
     color: #8b95a1;
     border: 1px solid #d1d6db;
     border-radius: 50%;
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -508,13 +462,13 @@ input[type="text"]:focus, textarea:focus {
 
 .valid-stamp {
     position: absolute;
-    right: 14px;
-    top: 36px;
-    border: 1.5px dashed #8b95a1;
+    right: 8px;
+    top: 32px;
+    border: 1px dashed #8b95a1;
     color: #8b95a1;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 800;
-    padding: 3px 6px;
+    padding: 2px 4px;
     border-radius: 50%;
     transform: rotate(-12deg);
     pointer-events: none;
@@ -526,7 +480,7 @@ input[type="text"]:focus, textarea:focus {
 }
 
 .barcode-label {
-    font-size: 7px;
+    font-size: 6.5px;
     color: #8b95a1;
     letter-spacing: 0.5px;
     margin-bottom: 2px;
@@ -534,8 +488,8 @@ input[type="text"]:focus, textarea:focus {
 
 .real-barcode {
     font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    letter-spacing: 1px;
+    font-size: 11px;
+    letter-spacing: 0.8px;
     line-height: 1;
     color: #191f28;
     white-space: nowrap;
@@ -543,49 +497,41 @@ input[type="text"]:focus, textarea:focus {
 
 .barcode-numbers {
     font-family: 'Space Mono', monospace;
-    font-size: 6.5px;
+    font-size: 6px;
     color: #6b7684;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     margin-top: 2px;
     white-space: nowrap;
 }
 
-/* ===================================================
-   📱 모바일 화면 최적화 (가로형 유지한 채 쏙 맞춤)
-   =================================================== */
+/* 모바일 전용 미세 스케일 조정 (가로 형태 완벽 유지) */
 @media (max-width: 480px) {
     .ticket-wrapper {
-        width: 100%;
-        max-width: 360px;
-        min-height: 180px;
+        min-height: 195px;
     }
     .ticket-header-bar, .stub-header-bar {
-        padding: 8px 10px;
-        font-size: 8px;
+        height: 34px;
+        font-size: 9px;
     }
     .ticket-content {
-        padding: 10px 12px;
+        padding: 10px 12px 10px 12px;
     }
     .ticket-msg {
         font-size: 14px;
     }
-    .ticket-info-group {
-        gap: 12px;
+    .stub-content {
+        padding: 10px 8px;
     }
     .info-row .val, .stub-field .val {
-        font-size: 11px;
-    }
-    .stub-content {
-        padding: 8px 10px;
+        font-size: 10.5px;
     }
     .real-barcode {
-        font-size: 10px;
-        letter-spacing: 0.5px;
+        font-size: 9.5px;
     }
 }
 
 #btn-download-ticket, #btn-download-receipt {
     width: 100%;
     max-width: 440px;
-    margin-top: 20px;
+    margin-top: 16px;
 }
