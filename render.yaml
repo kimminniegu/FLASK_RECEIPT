@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: flask-receipt
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13"
+      # 영수증 시간을 한국 시간으로 표시 (Render 서버 기본값은 UTC)
+      - key: TZ
+        value: Asia/Seoul
+      # 키 값은 Render 대시보드에서 직접 입력
+      - key: OPENAI_API_KEY
+        sync: false
